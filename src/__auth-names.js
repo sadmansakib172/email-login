@@ -1,3 +1,5 @@
-// 1. Authentication, Authorization
-// 2.login === sign in
-// 3. Register === sign up
+1. /*
+* 1.Authentication, Authorization
+*  2.login === sign in
+*  3. Register === sign up 
+*/
