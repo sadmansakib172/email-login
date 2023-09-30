@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import auth from "../../firebase/firebase.config";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { Link } from "react-router-dom";
 
 
 const Register = () => {
@@ -14,7 +15,8 @@ const Register = () => {
         console.log('form submitting');
         const email = e.target.email.value;
         const password = e.target.password.value;
-        console.log(email, password)
+        const accepted = e.target.terms.checked;
+        console.log(email, password, accepted)
 
         // reset error 
         setRegisterError('');
@@ -26,6 +28,10 @@ const Register = () => {
         }
         else if(!/[A-Z]/.test(password)){
             setRegisterError('password should have at least one upper case character')
+        }
+        else if(!accepted){
+            setRegisterError('please accept our terms and conditions');
+            return;
         }
         
         // create user
@@ -44,21 +50,28 @@ const Register = () => {
           <div className="mx-auto md:w-1/2">
           <h2 className="text-3xl mb-8">Please Register</h2>
             <form onSubmit={handleRegister}>
-                <input className="mb-4 w-3/4 py-2 px-4" type="email" name="email" placeholder="Email Address:" id="" required/>
+                <input className="mb-4 w-full py-2 px-4" type="email" name="email" placeholder="Email Address:" id="" required/>
                 <br></br>
-                <input 
-                className="mb-4 w-3/4 py-2 px-4" 
+               <div className="relative mb-4">
+               <input 
+                className=" w-full py-2 px-4" 
                 type={showPassword ? 'text' : 'password'}
                 name="password" 
                 placeholder="Password" 
                 id=""/>
-                <span onClick={()=>{setShowPassword(!showPassword)}}>
+                <span className="absolute top-3 right-2" onClick={()=>{setShowPassword(!showPassword)}}>
                     {
                         showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>
                     }
                 </span>
+               </div>
                 <br />
-                <input className="btn btn-primary mb-4 w-3/4" type="submit" value="Submit" />
+                <div className="mb-2">
+                <input type="checkbox" name="terms" id="terms" />
+                <label htmlFor="terms">Accept our <a href="">Terms and conditions</a></label>
+                </div>
+                <br />
+                <input className="btn btn-primary mb-4 w-full" type="submit" value="Submit" />
             </form>
             {
                 registerError && <p className="text-red-700">{registerError}</p>
@@ -66,6 +79,7 @@ const Register = () => {
             {
                 success && <p className="text-green-700">{success}</p>
             }
+            <p>Already have an account? please <Link className="text-green-600 underline" to="/login">Login</Link></p>
           </div>
         </div>
     );
